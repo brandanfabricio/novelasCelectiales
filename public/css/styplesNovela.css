@@ -1,0 +1,18 @@
+body {
+  height: 100vh  !important;
+  background-color: #495057 !important;
+}
+.card-novela-container{
+border: none;
+}
+
+.click-hover :hover{
+  
+  cursor: pointer;
+}
+.container-btn-add {
+
+  color: white; 
+  display:  flex;
+  justify-content: flex-end;
+}

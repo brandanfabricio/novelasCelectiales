@@ -1,0 +1,94 @@
+{{ define "listNovela" }}
+
+
+<div class="row mt-5 p-3 ">
+  {{range .}}
+  <div class="col-sm-4" data-bs-toggle="modal" data-bs-target="#n{{.Id}}">
+    <div class="card mb-3 card-novela-container bg-secondary click-hover">
+
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img src="{{.Imagen}}" class="img-fluid rounded-start" id="novela-img">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body" id="novela-body">
+
+            <h5 class="card-title ">{{.Titulo}}</h5>
+            <p class="card-text"><small class="text-body-secondary">capitulos: {{.Paginas}}</small></p>
+
+          </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+
+  <!-- modal -->
+
+  <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="n{{.Id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-light" id="staticBackdropLabel">{{.Titulo}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+
+
+
+
+          <div class="card mb-3" style="border: none;">
+
+            <div class="div-img"><img src="{{.Imagen}}" class="card-img-top imagen" alt="{{.Imagen}}"></div>
+            <div class="card-body">
+
+              <h5 class="card-title " style="text-align: center;">{{.Titulo}}</h5>
+
+              <p class="card-text">{{.Description}}</p>
+              <p class="card-text text-center"> capitulos: <small class="text-body-secondary">{{.Paginas}}</small></p>
+            </div>
+
+          </div>
+
+
+
+        </div>
+        <div class="modal-footer " style="justify-content: space-around">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">
+
+            <a href="/capitulo/list/{{.Id}}" style="text-decoration: none;">Ver</a>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {{end}}
+
+  <!-- Id          string
+	Titulo      string
+	Imagen      string
+	Url         string
+	Description string
+	Paginas     string -->
+
+</div>
+
+
+
+
+
+
+{{ end }}

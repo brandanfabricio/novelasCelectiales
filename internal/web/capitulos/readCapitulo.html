@@ -1,0 +1,68 @@
+{{define "readCapitulo"}}
+
+{{template "header"}}
+
+<div class="container-sm mt-5 p-4 contenidoPrin">
+  <div>
+
+
+
+    <button type="submit" class="btn btn-outline-secondary">
+      <a href="/capitulo/list/{{.NovelaId}}" class="text-secondary" style="text-decoration: none;"> volver </a>
+
+    </button>
+
+
+  </div>
+
+  <h1>{{.Titulo}}</h1>
+  <div>
+    <p>
+
+      {{.Contenido}}
+    </p>
+  </div>
+
+
+  <div class="btn-foo mb-3 mt-3">
+
+    <form action="/capitulo/list/read" method="post">
+      <input type="hidden" name="novela_id" value="{{.NovelaId}}">
+      <input type="hidden" name="numero_cap" value="{{.Before}}">
+      <button type="submit" class="btn btn-outline-secondary ">volver</button>
+    </form>
+
+
+    <button type="button" class="btn btn-outline-secondary temp">
+      recordar
+    </button>
+
+
+    <form action="/capitulo/list/read" method="post">
+      <input type="hidden" name="novela_id" value="{{.NovelaId}}">
+      <input type="hidden" name="numero_cap" value="{{.Next}}">
+      <button type="submit" class="btn btn-outline-secondary ">siguiente</button>
+    </form>
+
+
+  </div>
+
+</div>
+
+<style>
+  .btn-foo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .temp {
+    display: none;
+  }
+</style>
+
+
+{{template "footer"}}
+
+
+{{end}}

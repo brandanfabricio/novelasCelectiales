@@ -1,0 +1,373 @@
+{{define "listCapitulos"}}
+
+
+
+<div class="container">
+  <div class="col-6">
+
+
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Buscar por pagina" aria-label="buscar por pagina"
+        aria-describedby="button-addon2" id="inputPagina">
+      <button class="btn btn-outline-secondary" type="button" id="btn-search-page">Buscar</button>
+    </div>
+
+
+
+  </div>
+  <table class="table">
+
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Capitulo</th>
+        <th scope="col">Titulo</th>
+        <th scope="col">Accion</th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+
+
+
+
+
+      {{range .Capitulos}}
+
+      <tr>
+        <th scope="row">{{ .Id }}</th>
+        <td>{{.Ncap}}</td>
+        <td>{{ .Titulo }}</td>
+        <td>
+          <form action="/capitulo/list/read" method="post">
+
+            <input type="hidden" name="capitulo_id" value="{{.Id}}">
+            <input type="hidden" name="novela_id" value="{{.NovelaId}}">
+            <input type="hidden" name="numero_cap" value="{{.Ncap}}">
+
+            <button class="btn btn-info" type="submit">Leer</button>
+          </form>
+
+        </td>
+      </tr>
+
+      {{end}}
+
+
+
+
+    </tbody>
+  </table>
+
+
+  <div class="container">
+    <nav aria-label="...">
+      <ul class="paginado pagination" id="containerPaginate">
+
+      </ul>
+    </nav>
+
+  </div>
+</div>
+
+
+
+<script>
+
+  let page = 0;
+  const novelaId = '{{.Novela.Id}}';
+
+  document.getElementById('btn-search-page').addEventListener('click', searchPage)
+
+
+
+  function createTable(data) {
+    let body = document.getElementById('tbody');
+
+
+    body.innerHTML = '';
+    data.forEach(item => {
+      let tr = document.createElement('tr');
+      let id = document.createElement('th');
+      let cap = document.createElement('td');
+      let titulo = document.createElement('td');
+      let tdBoton = document.createElement('td');
+
+
+      let form = document.createElement('form')
+      let button = document.createElement('button');
+      let inputID = document.createElement('input');
+      let inputNovela = document.createElement('input');
+      let inputNcap = document.createElement('input');
+
+
+      /*formulario*/
+      // <form action="/capitulo/list/read" method="post">
+
+      form.action = '/capitulo/list/read'
+      form.method = 'post'
+
+
+      inputID.type = "hidden";
+      inputID.name = "capitulo_id"
+      inputID.value = item.id
+
+      inputNovela.type = "hidden";
+      inputNovela.name = "novela_id"
+      inputNovela.value = item.NovelaId
+
+      inputNcap.type = "hidden";
+      inputNcap.name = "numero_cap"
+      inputNcap.value = item.Ncap
+
+
+      button.type = 'submit'
+      button.className = "btn btn-info"
+      button.textContent = 'Leer'
+
+
+
+      form.appendChild(inputID)
+      form.appendChild(inputNovela)
+      form.appendChild(inputNcap)
+      form.appendChild(button)
+
+
+
+
+      // fin formulario
+
+
+      id.scope = "row"
+      id.textContent = item.Id
+      cap.textContent = item.Ncap
+      titulo.textContent = item.Titulo
+
+
+
+
+
+      tr.appendChild(id)
+      tr.appendChild(cap)
+      tr.appendChild(titulo)
+
+      tdBoton.appendChild(form)
+      tr.appendChild(tdBoton)
+
+      // console.log(item);
+      body.appendChild(tr)
+    })
+
+
+  }
+  function createPaginate(pag, status) {
+
+
+    switch (status) {
+      case 'A':
+        next(pag)
+        break;
+      case 'B':
+        previous(pag)
+        break;
+
+      default:
+        break;
+    }
+
+
+
+
+  }
+  function next(pag) {
+    let ul = document.getElementById('containerPaginate');
+    ul.innerHTML = ''
+    let previousPage = document.createElement('li')
+    previousPage.className = 'page-item';
+
+    let previousPageBtn = document.createElement('button')
+    previousPageBtn.className = 'page-link'
+    previousPageBtn.textContent = 'Previous'
+    previousPageBtn.onclick = function () {
+      createPaginate(page, 'B')
+    }
+    previousPage.appendChild(previousPageBtn)
+
+    ul.appendChild(previousPage)
+
+    for (let i = 1 + pag; i <= 5 + pag; i++) {
+
+      let pagItem = document.createElement('li')
+      pagItem.className = 'page-item';
+
+      let itemPageBtn = document.createElement('button')
+      itemPageBtn.className = 'page-link'
+      itemPageBtn.textContent = i
+
+      itemPageBtn.onclick = function () {
+        paginated(novelaId, i)
+      }
+
+
+      pagItem.appendChild(itemPageBtn)
+
+      ul.appendChild(pagItem)
+
+
+    }
+
+    let nextPage = document.createElement('li')
+    nextPage.className = 'page-item';
+
+    let nextPageBtn = document.createElement('button')
+    nextPageBtn.className = 'page-link'
+    nextPageBtn.textContent = 'Next'
+    nextPageBtn.onclick = function () {
+      createPaginate(page, 'A')
+    }
+
+    nextPage.appendChild(nextPageBtn)
+
+    ul.appendChild(nextPageBtn)
+
+    page++
+  }
+  function previous(pag) {
+    let ul = document.getElementById('containerPaginate');
+    ul.innerHTML = ''
+    let previousPage = document.createElement('li')
+    previousPage.className = 'page-item';
+
+    let previousPageBtn = document.createElement('button')
+    previousPageBtn.className = 'page-link'
+    previousPageBtn.textContent = 'Previous'
+    previousPageBtn.onclick = function () {
+      createPaginate(page, 'B')
+    }
+    previousPage.appendChild(previousPageBtn)
+
+    ul.appendChild(previousPage)
+
+    for (let i = 1 - pag; i <= 5 - pag; i++) {
+
+      let pagItem = document.createElement('li')
+      pagItem.className = 'page-item';
+
+      let itemPageBtn = document.createElement('button')
+      itemPageBtn.className = 'page-link'
+      itemPageBtn.textContent = i
+
+      itemPageBtn.onclick = function () {
+        paginated(novelaId, i)
+      }
+
+
+      pagItem.appendChild(itemPageBtn)
+
+      ul.appendChild(pagItem)
+
+
+    }
+
+    let nextPage = document.createElement('li')
+    nextPage.className = 'page-item';
+
+    let nextPageBtn = document.createElement('button')
+    nextPageBtn.className = 'page-link'
+    nextPageBtn.textContent = 'Next'
+    nextPageBtn.onclick = function () {
+      createPaginate(page, 'B')
+    }
+
+    nextPage.appendChild(nextPageBtn)
+
+    ul.appendChild(nextPageBtn)
+
+    page--
+  }
+
+  function read(id) {
+    id = Number(id)
+    let data = {
+      id,
+    }
+    fetch("/capitulo/list/read", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(
+        (response) => {
+          // console.log(response);
+          console.log(response)
+        }
+      ).catch(
+        err => {
+          console.log(err);
+        }
+      )
+  }
+  function searchPage() {
+    let input = document.getElementById('inputPagina');
+    input = parseInt(input.value)
+
+    if (!isNaN(input)) {
+
+
+      let data = {
+        novelaId,
+        page: input
+      }
+
+
+      fetch("/capitulo/list/searchPage", {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(
+          (response) => {
+            // console.log(response);
+            createTable(response)
+          }
+        ).catch(
+          err => {
+            console.log(err);
+          }
+        )
+
+    }
+
+  }
+  function paginated(id, page) {
+
+    let data = {
+      novelaId: id,
+      page
+    }
+
+    fetch("/capitulo/list/paginate", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+      .then(response => response.json())
+      .then(
+        (response) => {
+          // console.log(response);
+          createTable(response)
+        }
+      ).catch(
+        err => {
+          console.log(err);
+        }
+      )
+
+
+
+  }
+
+  createPaginate(page, 'A')
+</script>
+
+
+
+{{end}}
