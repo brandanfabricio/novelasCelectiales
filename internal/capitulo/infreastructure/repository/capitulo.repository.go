@@ -134,6 +134,9 @@ func (sql *MysqlCApituloRepo) AddCapitulo(data []domain.Capitulo) {
 	}
 	defer conex.Close()
 
+	
+	
+
 	// trasaccion
 
 	transax, err := conex.Begin()

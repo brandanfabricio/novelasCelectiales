@@ -17,7 +17,7 @@
 
   <h1>{{.Titulo}}</h1>
   <div>
-    <p>
+    <p  style="font-size: 1.5rem;">
 
       {{.Contenido}}
     </p>
@@ -29,7 +29,16 @@
     <form action="/capitulo/list/read" method="post">
       <input type="hidden" name="novela_id" value="{{.NovelaId}}">
       <input type="hidden" name="numero_cap" value="{{.Before}}">
-      <button type="submit" class="btn btn-outline-secondary ">volver</button>
+      {{ if eq .PermiseViewPage 0 }}
+      <button type="submit" class="btn btn-outline-secondary " disabled>volver</button>
+
+
+      {{ else }}
+      <button type="submit" class="btn btn-outline-secondary " disabled>volver</button>
+
+
+      {{ end }}
+
     </form>
 
 
@@ -41,10 +50,17 @@
     <form action="/capitulo/list/read" method="post">
       <input type="hidden" name="novela_id" value="{{.NovelaId}}">
       <input type="hidden" name="numero_cap" value="{{.Next}}">
+
+          {{ if eq .PermiseViewPage 0 }}
+      <button type="submit" class="btn btn-outline-secondary " disabled>siguiente</button>
+
+      {{ else }}
       <button type="submit" class="btn btn-outline-secondary ">siguiente</button>
+
+      {{ end }}
+
+
     </form>
-
-
   </div>
 
 </div>

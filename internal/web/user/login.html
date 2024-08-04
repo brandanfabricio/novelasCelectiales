@@ -1,0 +1,23 @@
+{{ define "login" }}
+
+{{template "header"}}
+<h1>
+  {{ . }}
+</h1>
+<div class="w-50 p-3 m-5 rounded" style="border: 2px solid #adb5bd;">
+    <form action="/user/login" method="post">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Email </label>
+          <input type="email" class="form-control" name="email" id="exampleInputEmail1">
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" class="btn btn-primary ">iniciar Session</button>
+    </form>
+</div>
+
+{{template "footer"}}
+
+{{ end }}

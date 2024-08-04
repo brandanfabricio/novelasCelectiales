@@ -8,6 +8,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 )
 
+require golang.org/x/crypto v0.22.0 // indirect
+
 require (
 	github.com/PuerkitoBio/goquery v1.8.1 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
@@ -30,8 +32,8 @@ require (
 	github.com/pilu/traffic v0.5.3 // indirect
 	github.com/saintfish/chardet v0.0.0-20230101081208-5e3ef4b5456d // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
-	golang.org/x/net v0.18.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.26.0 // indirect

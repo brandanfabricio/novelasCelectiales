@@ -9,9 +9,35 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
+
+var permiseViewPage int = 100
+
+func init() {
+
+	go actualizarVariableDiaria()
+}
+
+func actualizarVariableDiaria() {
+	for {
+		ahora := time.Now()
+		// Obtener la hora de inicio del siguiente día
+		inicioSiguienteDia := time.Date(ahora.Year(), ahora.Month(), ahora.Day()+1, 0, 0, 0, 0, ahora.Location())
+		duracionHastaSiguienteDia := inicioSiguienteDia.Sub(ahora)
+		fmt.Println(inicioSiguienteDia)
+
+		<-time.After(duracionHastaSiguienteDia)
+
+		// Actualizar la variable
+		permiseViewPage = 1000
+		fmt.Println("reset varibl")
+
+	}
+
+}
 
 type CapituloController struct {
 	App  application.CaseCapitulointerface
@@ -88,13 +114,14 @@ func (this CapituloController) SearchPage(w http.ResponseWriter, r *http.Request
 }
 
 type Data struct {
-	Id        int
-	Titulo    string
-	Contenido template.HTML
-	Ncap      int
-	NovelaId  string
-	Before    int
-	Next      int
+	Id              int
+	Titulo          string
+	Contenido       template.HTML
+	Ncap            int
+	NovelaId        string
+	Before          int
+	Next            int
+	PermiseViewPage int
 }
 
 func (this CapituloController) FindCapitulo(w http.ResponseWriter, r *http.Request) {
@@ -109,6 +136,7 @@ func (this CapituloController) FindCapitulo(w http.ResponseWriter, r *http.Reque
 	data := this.App.FindCapitulo(capituloId, novelaId, numeroCap)
 
 	before := data.Ncap
+
 	if data.Ncap <= 0 {
 
 		before = 1
@@ -117,16 +145,21 @@ func (this CapituloController) FindCapitulo(w http.ResponseWriter, r *http.Reque
 
 		before = data.Ncap - 1
 	}
+	if permiseViewPage > 0 {
+		fmt.Println(permiseViewPage)
+		permiseViewPage--
 
+	}
 	// rebisar
 	newData := Data{
-		Id:        data.Id,
-		Titulo:    data.Titulo,
-		Ncap:      data.Ncap,
-		NovelaId:  data.NovelaId,
-		Contenido: template.HTML(data.Contenido),
-		Before:    before,
-		Next:      data.Ncap + 1,
+		Id:              data.Id,
+		Titulo:          data.Titulo,
+		Ncap:            data.Ncap,
+		NovelaId:        data.NovelaId,
+		Contenido:       template.HTML(data.Contenido),
+		Before:          before,
+		Next:            data.Ncap + 1,
+		PermiseViewPage: permiseViewPage,
 	}
 
 	// fmt.Printf("titulo %s   antes %d   ahora %d  despues %d ", newData.Titulo, newData.Before, newData.Ncap, newData.Next)
